@@ -1,7 +1,8 @@
 export interface IPostCardProps {
   color: string,
-  title: string,
-  subTitle: string,
   createAt: string,
   id: string,
+  subTitle: string,
+  title: string,
+  updatedAt: string,
 }

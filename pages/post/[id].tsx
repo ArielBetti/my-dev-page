@@ -1,12 +1,12 @@
-import { ReactNode } from "react";
 import type { NextPage } from "next";
 import ReactMarkdown from "react-markdown";
 import dayjs from "dayjs";
 import Template from "../../template";
-import { getPostById, getPosts } from "../../graphql/hygraph/queries";
+import { getPostById } from "../../graphql/hygraph/queries";
 import { getUser } from "../../graphql/github/queries";
 import { IPost, IUser } from "../../interfaces";
 import Link from "next/link";
+import remarkGfm from "remark-gfm";
 
 interface IPostProps {
   user: IUser;
@@ -17,28 +17,47 @@ interface IPostProps {
 const Post: NextPage<IPostProps> = ({ user, post }) => {
   return (
     <Template user={user}>
-      <div className="prose prose-invert md:container md:mx-auto p-6">
-        <Link href="/">
-          <div className="cursor-pointer gap-1 text-cyan-400 flex flex-row justify-start items-center">
-            <i className="bx bx-arrow-back"></i>
-            <p>Voltar para listagem</p>
-          </div>
-        </Link>
+      <div className="prose prose-invert md:container md:mx-auto xl:px-40 lg:px-20 md:px-10 sm:px-5 px-6">
+        <div className="gap-1 text-cyan-400 flex flex-row">
+          <Link href="/">
+            <div className="flex items-center cursor-pointer ">
+              <i className="bx bx-arrow-back" />
+              <p>Voltar para listagem</p>
+            </div>
+          </Link>
+        </div>
         <p className="mx-0 mt-0">
           Criado:{" "}
-          {dayjs(post.createdAt).locale("pt-br").format("DD/MM/YYYY [as] h:mm")}{" "}
+          {dayjs(post.createdAt)
+            .locale("pt-br")
+            .format("DD/MM/YYYY [as] h:mm a")}{" "}
           | Atualizado:{" "}
-          {dayjs(post.updatedAt).locale("pt-br").format("DD/MM/YYYY [as] h:mm")}
+          {dayjs(post.updatedAt)
+            .locale("pt-br")
+            .format("DD/MM/YYYY [as] h:mm a")}
         </p>
-        <div className="flex flex-row items-center gap-3">
+        <div className="flex flex-row items-center gap-3 flex-wrap">
           <div
             style={{ backgroundColor: post.color?.hex || "#FFF" }}
             className="flex w-4 h-4 rounded-full"
           ></div>
           <h1 className="mb-0">{post.title}</h1>
         </div>
-        <h2>{post.subtitle}</h2>
-        <ReactMarkdown>{post.content}</ReactMarkdown>
+        <h2 className="mt-3">{post.subtitle}</h2>
+        {post.coverPhoto && (
+          <div className="post-coverphoto">
+            <img
+              className="shadow-lg rounded-lg"
+              src={post.coverPhoto?.url}
+              alt="Foto ilustrativa da postagem"
+            />
+          </div>
+        )}
+        <ReactMarkdown
+          className="markdown-section"
+          children={post.content}
+          remarkPlugins={[remarkGfm]}
+        />
       </div>
     </Template>
   );

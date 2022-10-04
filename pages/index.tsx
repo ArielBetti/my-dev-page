@@ -4,30 +4,28 @@ import dayjs from "dayjs";
 
 // components
 import PostCard from "../components/PostCard";
-import RepoCard from "../components/RepoCard";
 
 // templates
 import Template from "../template";
 
 // graphql
-import { getPinnedRepos, getUser } from "../graphql/github/queries";
+import { getUser } from "../graphql/github/queries";
 import { getPosts } from "../graphql/hygraph/queries";
 
 // types
-import { IPost, IRepo, IUser } from "../interfaces";
+import { IPost, IUser } from "../interfaces";
 
 interface IHomeProps {
-  repos: IRepo[];
   user: IUser;
   posts: IPost[];
   children: ReactNode;
 }
 
 // ::
-const Home: NextPage<IHomeProps> = ({ repos, user, posts }) => {
+const Home: NextPage<IHomeProps> = ({ user, posts }) => {
   return (
     <Template user={user}>
-      <div className="md:container md:mx-auto p-6">
+      <div className="md:container md:mx-auto px-3 py-6">
         <div className="gap-2 prose prose-invert mb-6 flex flex-row justify-start items-center">
           <i className="bx bx-home bx-sm text-gray-900 transition duration-75 text-gray-300 group-hover:text-gray-900 group-hover:text-white"></i>
           <h3 className="m-0">Home</h3>
@@ -38,21 +36,15 @@ const Home: NextPage<IHomeProps> = ({ repos, user, posts }) => {
               key={post.id}
               id={post.id}
               color={post.color?.hex || "#FFF"}
-              createAt={dayjs(post.createdAt)
-                .locale("pt-br")
-                .format("DD/MM/YYYY [as] h:mm")}
+              updatedAt={dayjs(new Date(post.updatedAt))
+                .locale("br")
+                .format("DD/MM/YYYY [as] h:mm a")}
+              createAt={dayjs(new Date(post.createdAt))
+                .locale("br")
+                .format("DD/MM/YYYY [as] h:mm a")}
               subTitle={post.subtitle}
               title={post.title}
             />
-          ))}
-        </div>
-        <div className="gap-2 prose prose-invert mb-6 flex flex-row justify-start items-center">
-          <i className="bx bx-pin bx-sm text-gray-900 transition duration-75 text-gray-300 group-hover:text-gray-900 group-hover:text-white"></i>
-          <h3 className="m-0">Repositórios fixados</h3>
-        </div>
-        <div className=" flex flex-row flex-wrap gap-3 items-start justify-start">
-          {repos?.map((repo: IRepo) => (
-            <RepoCard key={repo.id} repo={repo} />
           ))}
         </div>
       </div>
@@ -61,21 +53,13 @@ const Home: NextPage<IHomeProps> = ({ repos, user, posts }) => {
 };
 
 export async function getServerSideProps() {
-  const repos = await getPinnedRepos;
   const userData = await getUser;
   const posts = await getPosts;
 
-  const { user } = repos.data;
   const { myDevPagePosts } = posts.data;
-
-  const pinnedRepos = user.pinnedItems.edges.map(({ node }: any) => ({
-    ...node,
-    languages: node.languages.edges.map(({ node }: any) => node),
-  }));
 
   return {
     props: {
-      repos: pinnedRepos,
       user: userData.data.user,
       posts: myDevPagePosts,
     },

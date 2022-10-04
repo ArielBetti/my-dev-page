@@ -4,11 +4,12 @@ import { client } from "./client";
 export const getPosts = client.query({
   query: gql`
     query MyDevPagePosts {
-      myDevPagePosts {
+      myDevPagePosts(orderBy: publishedAt_DESC) {
         id
         createdAt
         subtitle
         title
+        updatedAt
         color {
           hex
         }

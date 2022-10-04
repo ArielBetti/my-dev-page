@@ -33,6 +33,9 @@ export interface IPost {
   title: string;
   updatedAt: string;
   content: string;
+  coverPhoto?: {
+    url: string,
+  },
   color: {
     __typename: string;
     hex: string;

@@ -7,7 +7,7 @@ const RepoCard: FC<IRepoCardProps> = ({ repo }) => {
     <a
       href={repo.url}
       target="_blank"
-      className="rounded-lg overflow-hidden shadow-md bg-gray-900 text-gray-900  text-white"
+      className="transition w-full lg:max-w-xs max-w-none duration-100 both hover:bg-slate-700 rounded-lg overflow-hidden shadow-md bg-gray-900 text-gray-900  text-white"
     >
       <div className="prose prose-invert">
         <div className="px-6 py-4">

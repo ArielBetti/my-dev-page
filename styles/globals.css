@@ -6,6 +6,7 @@
   overflow: auto;
   max-height: 100vh;
   animation: fadeIn 0.5s both;
+  padding-bottom: 30px;
 }
 
 .section-container::-webkit-scrollbar-track {
@@ -24,13 +25,40 @@
   background-color: #164e63;
 }
 
+.post-coverphoto {
+  max-width: 1216px;
+}
+
+.markdown-section img {
+  border-radius: 10px;
+}
+
+@media only screen and (max-width: 766px) {
+  .section-container {
+    padding-top: 80px;
+    align-items: center;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .markdown-section pre {
+    max-width: 450px;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  .markdown-section pre {
+    max-width: 300px;
+  }
+}
+
 @keyframes fadeIn {
   0% {
     opacity: 0;
-    transform: translateY(40px);
+    transform: translateY(20px);
   }
   100% {
     opacity: 1;
-    transform: translateY(20px);
+    transform: translateY(0px);
   }
 }
