@@ -29,6 +29,13 @@
   max-width: 1216px;
 }
 
+.markdown-section {
+  font-size: 1.45rem;
+  font-weight: 300;
+  line-height: 1.7;
+  letter-spacing: 0.069rem;
+}
+
 .markdown-section img {
   border-radius: 10px;
 }
