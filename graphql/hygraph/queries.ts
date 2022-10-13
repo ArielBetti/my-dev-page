@@ -4,7 +4,7 @@ import { client } from "./client";
 export const getPosts = client.query({
   query: gql`
     query MyDevPagePosts {
-      myDevPagePosts(orderBy: publishedAt_DESC) {
+      myDevPagePosts(orderBy: createdAt_DESC) {
         id
         createdAt
         subtitle
