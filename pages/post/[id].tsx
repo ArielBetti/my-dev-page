@@ -1,12 +1,14 @@
 import type { NextPage } from "next";
 import ReactMarkdown from "react-markdown";
 import dayjs from "dayjs";
+import readingTime from "reading-time";
 import Template from "../../template";
 import { getPostById } from "../../graphql/hygraph/queries";
 import { getUser } from "../../graphql/github/queries";
 import { IPost, IUser } from "../../interfaces";
 import Link from "next/link";
 import remarkGfm from "remark-gfm";
+import { useMemo } from "react";
 
 interface IPostProps {
   user: IUser;
@@ -15,6 +17,10 @@ interface IPostProps {
 
 // ::
 const Post: NextPage<IPostProps> = ({ user, post }) => {
+  const stats = readingTime(post?.content);
+
+  const readTimne = useMemo(() => Math.round(stats.minutes), [stats, post]);
+
   return (
     <Template user={user}>
       <div className="prose prose-invert md:container md:mx-auto xl:px-40 lg:px-20 md:px-10 sm:px-5 px-6">
@@ -30,11 +36,14 @@ const Post: NextPage<IPostProps> = ({ user, post }) => {
           Criado:{" "}
           {dayjs(post.createdAt)
             .locale("pt-br")
-            .format("DD/MM/YYYY [as] h:mm a")}{" "}
-          | Atualizado:{" "}
-          {dayjs(post.updatedAt)
-            .locale("pt-br")
             .format("DD/MM/YYYY [as] h:mm a")}
+          <p className="mx-0 mt-0">
+            Atualizado:{" "}
+            {dayjs(post.updatedAt)
+              .locale("pt-br")
+              .format("DD/MM/YYYY [as] h:mm a")}
+            <p className="mx-0 mt-0">Tempo de leitura: {readTimne} minutos</p>
+          </p>
         </p>
         <div className="flex flex-row items-center gap-3 flex-wrap">
           <div
