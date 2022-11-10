@@ -51,12 +51,10 @@ const Header: FC<IHeaderProps> = ({ user }) => {
           )}
         </div>
       </div>
-      {open && (
-        <div className="border-t-2 border-cyan-900 overflow-auto bg-gray-900 p-3 fixed w-full h-screen">
+        <div className={`border-t-2 border-cyan-900 overflow-auto bg-gray-900 p-3 fixed w-full h-screen duration-100 ease-out transition-all ${open ? 'translate-x-0' : 'translate-x-full'}`}>
           <NavigationLinks />
           <SocialLinks />
         </div>
-      )}
     </nav>
   );
 };
